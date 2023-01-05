@@ -590,6 +590,7 @@ function inviteAcedemyc(){
     request.onreadystatechange = function (){
         if(request.readyState == 4){
             const response = request.responseText;
+            alert(response)
             const responseObj = JSON.parse(response);
 
             if (responseObj['type'] == "erorr"){
@@ -622,6 +623,98 @@ function GetAllGrades(id){
 
 }
 
+function GetAllGradesAndActivateGradesAcOficer(id,id2,email){
+    const request  = new XMLHttpRequest();
+
+    request.onreadystatechange = function (){
+        if(request.readyState == 4){
+            const  respose = request.responseText;
+            document.getElementById(id).innerHTML = respose
+        }
+    }
+
+    request.open("GET","GetAllGradesProcess.php",true);
+    request.send()
+
+    GetAllAcoGrades(id2,email)
+
+    
+}
+function GetAllAcoGrades(id2,email){
+    const request2  = new XMLHttpRequest();
+    const form = new FormData();
+    form.append('email',email)
+    request2.onreadystatechange = function (){
+        if(request2.readyState == 4){
+            const  respose2 = request2.responseText;
+            document.getElementById(id2).innerHTML = respose2
+        }
+    }
+
+    request2.open("POST","GetAllAcedemycOfficerHaveGradesProcess.php",true);
+    request2.send(form)
+}
+
+function AddAcedemycForGrade(component,email,unique){
+    const grade = document.getElementById(component).value;
+    const form = new FormData();
+   
+    form.append('grade',grade)
+    form.append('email',email)
+
+    const request  = new XMLHttpRequest();
+
+    request.onreadystatechange = function (){
+        if(request.readyState == 4){
+            const  respose = request.responseText;
+            const  responseObj = JSON.parse(respose);
+
+            if (responseObj['type'] == "Error"){
+                showEror("OOPS..!",responseObj['trigger'])
+            }else if (responseObj['type'] == "success"){
+                showSuccess("Success!","Successfully Added Grade For Acedemic Oficer")
+                GetAllGradesAndActivateGradesAcOficer('AddGradesForAcedemicOficer'+unique,'RemoveTeacherForSubjectAndGradeSelect'+unique,email)
+            }
+        }
+    }
+
+    request.open("POST","AddGradesForAcedemicProcess.php",true);
+    request.send(form)
+
+
+
+}
+
+function RemoveAcedemycForGrade(component,email,unique){
+    const grade = document.getElementById(component).value;
+    const form = new FormData();
+   
+    form.append('grade',grade)
+    form.append('email',email)
+
+    const request  = new XMLHttpRequest();
+
+    request.onreadystatechange = function (){
+        if(request.readyState == 4){
+            const  respose = request.responseText;
+            
+            const  responseObj = JSON.parse(respose);
+
+            if (responseObj['type'] == "Error"){
+                showEror("OOPS..!",responseObj['trigger'])
+            }else if (responseObj['type'] == "success"){
+                showSuccess("Success!","Successfully Added Grade For Acedemic Oficer")
+                GetAllGradesAndActivateGradesAcOficer('AddGradesForAcedemicOficer'+unique,'RemoveTeacherForSubjectAndGradeSelect'+unique,email)
+            }
+        }
+    }
+
+    request.open("POST","RemoveGradesForAcedemicProcess.php",true);
+    request.send(form)
+
+
+
+}
 
 function GetAllSubjects(id){
     const request  = new XMLHttpRequest();
@@ -739,6 +832,47 @@ function sendNotificationToTeacher(id,email){
 
     request.open('POST','SendNotificationToTeacher.php',true)
     request.send(form);
+
+}
+function sendNotificationToAcedemic(id,email){
+    const text  = document.getElementById(id).value;
+    const form = new FormData();
+    form.append('email',email)
+    form.append('msg',text);
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function (){
+        if(request.readyState == 4){
+            const response = request.responseText;
+            alert(response);
+        }
+    }
+
+    request.open('POST','SendNotificationToAcedemic.php',true)
+    request.send(form);
+
+}
+
+function AdminAcedemicSearch(){
+    const text = document.getElementById('a_acdoff_search_txt').value;
+    const grade=document.getElementById('a_acdoff_search_gde').value;
+
+    const form = new FormData()
+    form.append('text',text)
+    form.append('grade',grade)
+
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function (){
+        if (request.readyState == 4){
+            const response = request.responseText;
+            document.getElementById('TeachersBody').innerHTML =response
+        }
+    }
+
+    request.open("POST","AdminSearchAcedemic.php",true);
+    request.send(form);
+
 
 }
 

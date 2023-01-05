@@ -76,6 +76,18 @@ function isExitsTeacher($email){
         return true;
     }
 }
+function isNotExitsAcedemic($email){
+    $rs = Academic_q::SearchAcedemicByEmail($email);
+
+    $n = $rs -> num_rows;
+
+    if ($n > 0){
+        return false;
+    }else{
+        return true;
+    }
+
+}
 function isThisSubjectHaveThisGrade($grade,$sub){
     $rs = Admin_q::GetGradeAndSubjectByGidAndSubID($grade,$sub);
     $n = $rs -> num_rows;

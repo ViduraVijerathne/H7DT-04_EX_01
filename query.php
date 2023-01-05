@@ -211,11 +211,15 @@ class Academic_q
 
     public static function chageVcodeRetypeTime($email, $password, $time)
     {
-        Database::iud("UPDATE `academic` SET `v_code_retype` = '" . $time . "' WHERE  email = '" . $email . "' AND password = '" . $password . "' ");
+        Database::iud(" UPDATE `academic` SET `v_code_retype` = '" . $time . "' WHERE  email = '" . $email . "' AND password = '" . $password . "' ");
     }
     public static function updateVC($email, $vc)
     {
-        Database::iud("UPDATE `academic` SET `v_code` = '" . $vc . "' WHERE  email = '" . $email . "' ");
+        Database::iud(" UPDATE `academic` SET `v_code` = '" . $vc . "' WHERE  email = '" . $email . "' ");
+    }
+
+    public static function SearchAcedemicByEmail($email){
+        return Database::search(" SELECT * FROM  academic WHERE  email = '" . $email . "'  ");
     }
 }
 
@@ -226,6 +230,13 @@ class Admin_q
         $time = Utiles::JustNowtime();
         Database::iud("INSERT INTO t_notifications (`body`,`time`,`teacher_email`) VALUES ('" . $body . "','" . $time . "','" . $email . "') ");
     }
+
+    public static function SendNotificationToAcedemic($email, $body)
+    {
+        $time = Utiles::JustNowtime();
+        Database::iud(" INSERT INTO ac_notifications (`body`,`time`,`academic_email`) VALUES ('" . $body . "','" . $time . "','" . $email . "') ");
+    }
+
     public static function signin($email, $password)
     {
         return Database::search("SELECT * FROM `admin` WHERE email  = '" . $email . "' AND password = '" . $password . "'");
@@ -249,9 +260,38 @@ class Admin_q
 
         return $password;
     }
+
+    public static function CreateNewAcedemic($email, $fname, $lname){
+        $password = uniqid();
+        $date = Utiles::JustNowtime();
+        Database::iud(" INSERT INTO `academic`  (`email`,`password`,`fname`,`lname`,`joined_date`,`gender_gender_id`) VALUES('" . $email . "','" . $password . "','" . $fname . "','" . $lname . "','" . $date . "','1') ");
+
+        return $password;
+    }
+
     public static function AddGradeSubjectForTeacher($email, $grade, $subject)
     {
         Database::iud("INSERT INTO `teacher_has_grade_subjects`  (`teacher_email`,`grade_has_subjects_grade_g_id`,`grade_has_subjects_subjects_subject_id`) VALUES ('" . $email . "','" . $grade . "','" . $subject . "')");
+    }
+
+    public static function searchAcedemicGradeByEmailGrade($email,$grade){
+        return Database::search("SELECT * FROM `academic_has_grade` WHERE `academic_email` = '".$email."' AND `grade_g_id` = '".$grade."'");
+
+
+    }
+
+    public static function AddGradeForAcedemic($email, $grade)
+    {
+        Database::iud(" INSERT INTO `academic_has_grade`  (`academic_email`,`grade_g_id`) VALUES('" . $email . "','" . $grade . "')");
+    }
+
+    public static function RemoveGradeForAcedemic($email, $grade)
+    {
+        Database::iud(" DELETE FROM  `academic_has_grade` WHERE  `academic_email` = '" . $email . "'  AND `grade_g_id` = '" . $grade . "'");
+    }
+
+    public static function GetAllgradesForAcedemic($email){
+        return Database::search(" SELECT * FROM `academic_has_grade` INNER JOIN grade ON g_id = grade_g_id WHERE `academic_email` = '".$email."' ");
     }
 
     public static function GetAllTeachers()
@@ -259,9 +299,16 @@ class Admin_q
         return Database::search("SELECT * FROM teacher ");
     }
 
+    public static function GetAllAcedemicOficer(){
+        return Database::search("SELECT * FROM academic ");
+    }
+
     public static function GetTeacherAllGradersAndSubjectByEmail($email)
     {
         return Database::search("SELECT * FROM teacher_has_grade_subjects INNER JOIN grade ON  grade_has_subjects_grade_g_id = g_id INNER JOIN subjects ON grade_has_subjects_subjects_subject_id = subject_id WHERE teacher_email = '" . $email . "'  ");
+    }
+    public static function GetAcedemicAllGradersByEmail($email){
+        return Database::search("SELECT * FROM academic_has_grade INNER JOIN grade ON  grade_g_id = g_id  WHERE academic_email = '" . $email . "'  ");
     }
 
     public static function GetGradeAndHaveAllSubject()
@@ -300,6 +347,17 @@ class Admin_q
         ON grade_has_subjects_subjects_subject_id = subject_id WHERE email LIKE '%" . $text . "%'  OR fname LIKE '%" . $text . "%'  OR lname LIKE '%" . $text . "%'  ");
     }
 
+    public static function SearchAcedemicLike($text)
+    {
+        return Database::search("SELECT * FROM academic INNER JOIN academic_has_grade 
+        ON email= academic_email 
+        
+        INNER JOIN grade
+        ON grade_g_id = g_id  
+        
+        WHERE email LIKE '%" . $text . "%'  OR fname LIKE '%" . $text . "%'  OR lname LIKE '%" . $text . "%'  ");
+    }
+
     public static function SearchTeacherLikeWithGrade($text, $grade)
     {
         return Database::search("SELECT * FROM teacher 
@@ -312,6 +370,18 @@ class Admin_q
         
         INNER JOIN subjects
         ON grade_has_subjects_subjects_subject_id = subject_id
+        
+        WHERE (email LIKE '%" . $text . "%'  OR fname LIKE '%" . $text . "%'  OR lname LIKE '%" . $text . "%')  AND  g_id = '".$grade."'  ");
+    }
+
+    public static function SearchAcedemicLikeWithGrade($text, $grade)
+    {
+        return Database::search("SELECT * FROM academic 
+        INNER JOIN academic_has_grade 
+        ON email= academic_email 
+        
+        INNER JOIN grade
+        ON grade_g_id = g_id  
         
         WHERE (email LIKE '%" . $text . "%'  OR fname LIKE '%" . $text . "%'  OR lname LIKE '%" . $text . "%')  AND  g_id = '".$grade."'  ");
     }
