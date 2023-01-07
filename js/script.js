@@ -176,10 +176,10 @@ function sigin(mode) {
 
                     } else {
 
-                        showSuccess("success!", "WellCome Studet!");
+                        showSuccess("success!", "WellCome Teacher!");
 
                         setTimeout(function () {
-                            window.location = "studentPanel.php"
+                            window.location = "teacherPanel.php"
 
                         }, 1000)
 
@@ -347,19 +347,19 @@ function selectGrade_gs(id) {
 // student agreement sigin
 function agreemetSigin() {
     const form = new FormData();
-    
+
     const request = new XMLHttpRequest();
     request.open('GET', 'agreemetSignin.php')
 
     request.onreadystatechange = function () {
-        
+
         if (request.readyState == 4) {
             const response = request.responseText;
             const responseObj = JSON.parse(response);
 
-            if (responseObj['type'] == 'erorr'){
+            if (responseObj['type'] == 'erorr') {
                 showEror(responseObj['trigger']);
-            }else{
+            } else {
                 window.location.reload()
             }
         }
@@ -371,19 +371,19 @@ function agreemetSigin() {
 
 // student btn nav
 var nowStudentPage = "s_home"
-function s_btn_nav(page){
-    const nowStudentPage_btn = document.getElementById("btn_"+nowStudentPage);
+function s_btn_nav(page) {
+    const nowStudentPage_btn = document.getElementById("btn_" + nowStudentPage);
     nowStudentPage_btn.classList.remove('btn-dark');
     nowStudentPage_btn.classList.add('btn-outline-dark');
 
-    const selectingStudentPage_btn = document.getElementById("btn_"+page);
+    const selectingStudentPage_btn = document.getElementById("btn_" + page);
     selectingStudentPage_btn.classList.add('btn-dark');
     selectingStudentPage_btn.classList.remove('btn-outline-dark');
 
     nowStudentPage = page
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function(){
-        if (request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
 
             document.getElementById('dashbordBody').innerHTML = response
@@ -392,7 +392,7 @@ function s_btn_nav(page){
 
     }
 
-    request.open('GET',page+'.php');
+    request.open('GET', page + '.php');
     request.send();
 
 
@@ -402,12 +402,12 @@ function s_btn_nav(page){
 }
 
 var nowAdminPage = "home";
-function a_btn_nav(page){
-    const nowStudentPage_btn = document.getElementById("btn_a_"+nowAdminPage);
+function a_btn_nav(page) {
+    const nowStudentPage_btn = document.getElementById("btn_a_" + nowAdminPage);
     nowStudentPage_btn.classList.remove('btn-dark');
     nowStudentPage_btn.classList.add('btn-outline-dark');
 
-    const selectingStudentPage_btn = document.getElementById("btn_a_"+page);
+    const selectingStudentPage_btn = document.getElementById("btn_a_" + page);
     selectingStudentPage_btn.classList.add('btn-dark');
     selectingStudentPage_btn.classList.remove('btn-outline-dark');
 
@@ -415,8 +415,8 @@ function a_btn_nav(page){
 
 
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function(){
-        if (request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
 
             document.getElementById('dashbordBody').innerHTML = response
@@ -425,29 +425,57 @@ function a_btn_nav(page){
 
     }
 
-    request.open('GET','a_'+page+'.php');
+    request.open('GET', 'a_' + page + '.php');
     request.send();
 }
 
-function Adminsigin(){
+var nowTeacherPage = "home";
+function t_btn_nav(page) {
+    const nowStudentPage_btn = document.getElementById("btn_t_" + nowTeacherPage);
+    nowStudentPage_btn.classList.remove('btn-dark');
+    nowStudentPage_btn.classList.add('btn-outline-dark');
+
+    const selectingStudentPage_btn = document.getElementById("btn_t_" + page);
+    selectingStudentPage_btn.classList.add('btn-dark');
+    selectingStudentPage_btn.classList.remove('btn-outline-dark');
+
+    nowTeacherPage = page
+
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+
+            document.getElementById('dashbordBody').innerHTML = response
+            // alert(response)
+        }
+
+    }
+
+    request.open('GET', 't_' + page + '.php');
+    request.send();
+}
+
+function Adminsigin() {
     const email = document.getElementById('asi_email').value;
     const password = document.getElementById('asi_password').value;
 
     const form = new FormData();
-    form.append('email',email)
-    form.append('password',password);
-    
+    form.append('email', email)
+    form.append('password', password);
+
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
             const responseObj = JSON.parse(response);
 
-            if (responseObj['type'] == 'error'){
-                showEror('OOPS..!',responseObj['trigger'])
+            if (responseObj['type'] == 'error') {
+                showEror('OOPS..!', responseObj['trigger'])
 
-            }else if (responseObj['type'] == 'success'){
-                showEror('success!',responseObj['trigger'])
+            } else if (responseObj['type'] == 'success') {
+                showEror('success!', responseObj['trigger'])
                 document.getElementById('AdminSiginCotaier').classList.add('d-none')
                 document.getElementById('AdminVerifySiginCotaier').classList.remove('d-none')
 
@@ -455,86 +483,86 @@ function Adminsigin(){
             }
         }
     }
-    request.open('POST','adminsigninProcess.php',true)
+    request.open('POST', 'adminsigninProcess.php', true)
     request.send(form);
 
 
 }
 
-function AdminCodeverify(){
+function AdminCodeverify() {
     const vc = document.getElementById('asi_vcode').value;
     const email = document.getElementById('asi_email').value;
     const password = document.getElementById('asi_password').value;
 
     const form = new FormData();
-    form.append('email',email)
-    form.append('password',password);
-    form.append('vc',vc)
-    
+    form.append('email', email)
+    form.append('password', password);
+    form.append('vc', vc)
+
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
             const responseObj = JSON.parse(response);
 
-            if (responseObj['type'] == 'error'){
-                showEror('OOPS..!',responseObj['trigger'])
+            if (responseObj['type'] == 'error') {
+                showEror('OOPS..!', responseObj['trigger'])
 
-            }else if (responseObj['type'] == 'success'){
-                showSuccess('success!',responseObj['trigger'])
-                
+            } else if (responseObj['type'] == 'success') {
+                showSuccess('success!', responseObj['trigger'])
+
                 window.location = "adminPanel.php"
 
 
-            }else{
+            } else {
                 alert(response)
             }
         }
     }
-    
-    request.open('POST','adminVCProcess.php',true)
+
+    request.open('POST', 'adminVCProcess.php', true)
     request.send(form);
 }
 
 // grade on change event _ load subjects for grade
-function GradeOptionChanged(grade_com_id,subject_com_id){
+function GradeOptionChanged(grade_com_id, subject_com_id) {
     const grade = document.getElementById(grade_com_id).value;
-    
+
     const form = new FormData();
-    form.append('grade',grade);
+    form.append('grade', grade);
 
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if (request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
-            
+
             document.getElementById(subject_com_id).innerHTML = response
         }
     }
-    request.open('POST','GetSubjectByGradePocess.php',true);
+    request.open('POST', 'GetSubjectByGradePocess.php', true);
     request.send(form)
 }
 // Subject on change event _ load Grade for Subject
-function SubjectOptionChanged(grade_com_id,subject_com_id){
+function SubjectOptionChanged(grade_com_id, subject_com_id) {
     const subject = document.getElementById(subject_com_id).value;
-    
+
     const form = new FormData();
-    form.append('subject',subject);
+    form.append('subject', subject);
 
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if (request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
-            
+
             document.getElementById(grade_com_id).innerHTML = response
         }
     }
-    request.open('POST','GetGradeBySubjectPocess.php',true);
+    request.open('POST', 'GetGradeBySubjectPocess.php', true);
     request.send(form)
 
 }
 
-function inviteTeacher(){
+function inviteTeacher() {
     const email = document.getElementById('add_new_teacher_email').value;
     const fname = document.getElementById('add_new_teacher_fn').value;
     const lname = document.getElementById('add_new_teacher_ln').value;
@@ -542,29 +570,29 @@ function inviteTeacher(){
     const subject = document.getElementById('add_new_teacher_sb').value;
 
     const form = new FormData();
-    form.append('email',email);
-    form.append('fname',fname);
-    form.append('lname',lname);
-    form.append('grade',grade);
-    form.append('subject',subject);
+    form.append('email', email);
+    form.append('fname', fname);
+    form.append('lname', lname);
+    form.append('grade', grade);
+    form.append('subject', subject);
 
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
             const response = request.responseText;
             const responseObj = JSON.parse(response);
 
-            if (responseObj['type'] == "erorr"){
-                showEror("OOPS..!",responseObj['trigger'])
+            if (responseObj['type'] == "erorr") {
+                showEror("OOPS..!", responseObj['trigger'])
 
-            }else if (responseObj['type'] == "success"){
-                showSuccess("success","successfully added new teacher!")
-            }else{
+            } else if (responseObj['type'] == "success") {
+                showSuccess("success", "successfully added new teacher!")
+            } else {
                 alert(response)
             }
         }
     }
-    request.open("POST","inviteTeacherProcess.php",true)
+    request.open("POST", "inviteTeacherProcess.php", true)
     request.send(form)
 
 
@@ -573,7 +601,7 @@ function inviteTeacher(){
 
 }
 
-function inviteAcedemyc(){
+function inviteAcedemyc() {
     const email = document.getElementById('add_new_aco_email').value;
     const fname = document.getElementById('add_new_aco_fn').value;
     const lname = document.getElementById('add_new_aco_ln').value;
@@ -581,322 +609,707 @@ function inviteAcedemyc(){
 
 
     const form = new FormData();
-    form.append('email',email);
-    form.append('fname',fname);
-    form.append('lname',lname);
-    form.append('grade',grade);
+    form.append('email', email);
+    form.append('fname', fname);
+    form.append('lname', lname);
+    form.append('grade', grade);
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            alert(response)
+            const responseObj = JSON.parse(response);
+
+            if (responseObj['type'] == "erorr") {
+                showEror("OOPS..!", responseObj['trigger'])
+
+            } else if (responseObj['type'] == "success") {
+                showSuccess("success", "successfully added new Acedemyc Oficer !")
+            } else {
+                alert(response)
+            }
+        }
+    }
+    request.open("POST", "inviteAcedemicOficerProcess.php", true)
+    request.send(form)
+
+}
+
+function GetAllGrades(id) {
+    const request = new XMLHttpRequest();
+
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const respose = request.responseText;
+            // document.getElementById(id).innerHTML = respose
+        }
+    }
+
+    request.open("GET", "GetAllGradesProcess.php", true);
+    request.send()
+
+}
+
+function GetAllGradesAndActivateGradesAcOficer(id, id2, email) {
+    const request = new XMLHttpRequest();
+
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const respose = request.responseText;
+            document.getElementById(id).innerHTML = respose
+        }
+    }
+
+    request.open("GET", "GetAllGradesProcess.php", true);
+    request.send()
+
+    GetAllAcoGrades(id2, email)
+
+
+}
+function GetAllAcoGrades(id2, email) {
+    const request2 = new XMLHttpRequest();
+    const form = new FormData();
+    form.append('email', email)
+    request2.onreadystatechange = function () {
+        if (request2.readyState == 4) {
+            const respose2 = request2.responseText;
+            document.getElementById(id2).innerHTML = respose2
+        }
+    }
+
+    request2.open("POST", "GetAllAcedemycOfficerHaveGradesProcess.php", true);
+    request2.send(form)
+}
+
+function AddAcedemycForGrade(component, email, unique) {
+    const grade = document.getElementById(component).value;
+    const form = new FormData();
+
+    form.append('grade', grade)
+    form.append('email', email)
+
+    const request = new XMLHttpRequest();
+
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const respose = request.responseText;
+            const responseObj = JSON.parse(respose);
+
+            if (responseObj['type'] == "Error") {
+                showEror("OOPS..!", responseObj['trigger'])
+            } else if (responseObj['type'] == "success") {
+                showSuccess("Success!", "Successfully Added Grade For Acedemic Oficer")
+                GetAllGradesAndActivateGradesAcOficer('AddGradesForAcedemicOficer' + unique, 'RemoveTeacherForSubjectAndGradeSelect' + unique, email)
+            }
+        }
+    }
+
+    request.open("POST", "AddGradesForAcedemicProcess.php", true);
+    request.send(form)
+
+
+
+}
+
+function RemoveAcedemycForGrade(component, email, unique) {
+    const grade = document.getElementById(component).value;
+    const form = new FormData();
+
+    form.append('grade', grade)
+    form.append('email', email)
+
+    const request = new XMLHttpRequest();
+
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const respose = request.responseText;
+
+            const responseObj = JSON.parse(respose);
+
+            if (responseObj['type'] == "Error") {
+                showEror("OOPS..!", responseObj['trigger'])
+            } else if (responseObj['type'] == "success") {
+                showSuccess("Success!", "Successfully Added Grade For Acedemic Oficer")
+                GetAllGradesAndActivateGradesAcOficer('AddGradesForAcedemicOficer' + unique, 'RemoveTeacherForSubjectAndGradeSelect' + unique, email)
+            }
+        }
+    }
+
+    request.open("POST", "RemoveGradesForAcedemicProcess.php", true);
+    request.send(form)
+
+
+
+}
+
+function GetAllSubjects(id) {
+    const request = new XMLHttpRequest();
+
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const respose = request.responseText;
+            // document.getElementById(id).innerHTML = respose
+        }
+    }
+
+    request.open("GET", "GetAllSubjectProcess.php", true);
+    request.send()
+
+}
+
+function GetAllSubjectAndGrades(SubjectCompId, gradeCompId) {
+    GetAllGrades(gradeCompId)
+    GetAllSubjects(SubjectCompId)
+}
+function AddTeacherForSubjectAndGrade(id, email) {
+    const row = document.getElementById(id).value;
+
+    if (row != "0") {
+        const arr = row.split("@");
+        const grade = arr[0];
+        const subject = arr[1];
+
+        const form = new FormData();
+        form.append('grade', grade)
+        form.append('subject', subject)
+        form.append('email', email)
+
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                const response = request.responseText;
+                const responseObj = JSON.parse(response);
+
+                if (responseObj['type'] == 'error') {
+                    showEror("OOPS..!", responseObj['trigger'])
+                } else if (responseObj['type'] == 'success') {
+                    showEror("success!", "successfully Added Subject and grade")
+
+                    setTimeout(() => {
+                        a_btn_nav('Teachers')
+                    }, 2000);
+
+                } else {
+
+                    alert(response)
+                }
+            }
+        }
+        request.open('POST', "AddGradeAndSubForTeacherProcess.php", true);
+        request.send(form);
+    }
+}
+function UpdateRemoveStudentSubjectComp(email, grade, unique) {
+    const form = new FormData();
+
+    form.append('grade', grade)
+    form.append('email', email)
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            document.getElementById('RemoveTeacherForSubjectAndGradeSelect' + unique).innerHTML = response
+        }
+    }
+
+    request.open('POST', "UpdateRemoveStudentSubjectComp.php", true);
+    request.send(form);
+}
+function AddStudentForSubject(id, email, unique) {
+    const row = document.getElementById(id).value;
+
+    if (row != "0") {
+
+        const subject = row;
+
+        const form = new FormData();
+
+        form.append('subject', subject)
+        form.append('email', email)
+
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                const response = request.responseText;
+
+                const responseObj = JSON.parse(response);
+
+                if (responseObj['type'] == 'error') {
+                    showEror("OOPS..!", responseObj['trigger'])
+                } else if (responseObj['type'] == 'success') {
+                    showEror("success!", "successfully Added Subject")
+
+                    UpdateRemoveStudentSubjectComp(email, responseObj['grade'], unique)
+                    setTimeout(() => {
+                        //    a_btn_nav('Teachers')
+                    }, 2000);
+
+                } else {
+
+                    alert(response)
+                }
+            }
+        }
+        request.open('POST', "AddSubSubForStudentProcess.php", true);
+        request.send(form);
+    }
+}
+
+
+function RemoveTeacherForSubjectAndGrade(id, email) {
+
+    const row = document.getElementById(id).value;
+
+    if (row != "0") {
+        const arr = row.split("@");
+        const grade = arr[0];
+        const subject = arr[1];
+
+        const form = new FormData();
+        form.append('grade', grade)
+        form.append('subject', subject)
+        form.append('email', email)
+
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                const response = request.responseText;
+                // alert(response)
+                const responseObj = JSON.parse(response);
+
+                if (responseObj['type'] == 'error') {
+                    showEror("OOPS..!", responseObj['trigger'])
+                } else if (responseObj['type'] == 'success') {
+                    showEror("success!", "successfully Remove Subject and grade")
+
+                    setTimeout(() => {
+                        a_btn_nav('Teachers')
+                    }, 2000);
+
+                } else {
+
+                    alert(response)
+                }
+            }
+        }
+        request.open('POST', "RemoveGradeAndSubForTeacherProcess.php", true);
+        request.send(form);
+    }
+
+}
+function RemoveStudetForSubject(id, email, unique) {
+    const subject = document.getElementById(id).value;
+
+    const form = new FormData();
+    form.append('subject', subject)
+    form.append('email', email);
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+
+            const responseObj = JSON.parse(response);
+
+            if (responseObj['type'] == 'error') {
+                showEror("OOPS..!", responseObj['trigger'])
+            } else if (responseObj['type'] == 'success') {
+                showSuccess("success!", "successfully Remove Subject")
+                UpdateRemoveStudentSubjectComp(email, responseObj['grade'], unique)
+
+            } else {
+
+                alert(response)
+            }
+        }
+    }
+
+    request.open('POST', 'RemoveStudetForSubject.php', true)
+    request.send(form);
+}
+
+function sendNotificationToTeacher(id, email) {
+    const text = document.getElementById(id).value;
+    const form = new FormData();
+    form.append('email', email)
+    form.append('msg', text);
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            alert(response);
+        }
+    }
+
+    request.open('POST', 'SendNotificationToTeacher.php', true)
+    request.send(form);
+
+}
+function sendNotificationToStudent(id, email) {
+    const text = document.getElementById(id).value;
+    const form = new FormData();
+    form.append('email', email)
+    form.append('msg', text);
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            alert(response);
+        }
+    }
+
+    request.open('POST', 'SendNotificationToStudent.php', true)
+    request.send(form);
+
+}
+function sendNotificationToAcedemic(id, email) {
+    const text = document.getElementById(id).value;
+    const form = new FormData();
+    form.append('email', email)
+    form.append('msg', text);
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            alert(response);
+        }
+    }
+
+    request.open('POST', 'SendNotificationToAcedemic.php', true)
+    request.send(form);
+
+}
+
+function AdminAcedemicSearch() {
+    const text = document.getElementById('a_acdoff_search_txt').value;
+    const grade = document.getElementById('a_acdoff_search_gde').value;
+
+    const form = new FormData()
+    form.append('text', text)
+    form.append('grade', grade)
+
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            document.getElementById('TeachersBody').innerHTML = response
+        }
+    }
+
+    request.open("POST", "AdminSearchAcedemic.php", true);
+    request.send(form);
+
+
+}
+
+function AdminTeacherSearch() {
+    const text = document.getElementById('a_teacher_search_txt').value;
+    const grade = document.getElementById('a_teacher_search_gde').value;
+    const sub = document.getElementById('a_teacher_search_sub').value;
+
+    const form = new FormData()
+    form.append('text', text)
+    form.append('grade', grade)
+    form.append('sub', sub)
+
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            document.getElementById('TeachersBody').innerHTML = response
+        }
+    }
+
+    request.open("POST", "AdminSearchTeacher.php", true);
+    request.send(form);
+
+
+}
+function AdminStudetSearch() {
+    const text = document.getElementById('a_Studet_search_txt').value;
+    const grade = document.getElementById('a_Student_search_gde').value;
+
+    const form = new FormData()
+    form.append('text', text)
+    form.append('grade', grade)
+
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            document.getElementById('TeachersBody').innerHTML = response
+        }
+    }
+
+    request.open("POST", "AdminSearchStudet.php", true);
+    request.send(form);
+
+
+}
+function GetStudetSub(email, grade, component) {
+    const form = new FormData()
+    form.append('email', email)
+    form.append('grade', grade)
+
+
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+
+            document.getElementById(component).innerHTML = response
+        }
+    }
+
+    request.open("POST", "studentAllSubjecSelectorTagProcess.php", true);
+    request.send(form);
+
+}
+
+function StudentPassNextGrade(email, unique) {
+
+    const form = new FormData();
+    form.append('email', email)
+
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            const responseObj = JSON.parse(response);
+            if (responseObj['type'] == "success") {
+                document.getElementById('Grade' + unique).innerHTML = "Grade " + responseObj['NextGrade'];
+                showSuccess("Success!", "SuccessFully Student pass to next Grade!")
+
+            } else {
+                showEror("OOPS!", responseObj['trigger'])
+            }
+        }
+    }
+
+    request.open("POST", "StudentPassNextGrade.php", true);
+    request.send(form);
+
+}
+
+// Teacher Panel
+function LoadTeacherNotification() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            const response = request.responseText;
+            document.getElementById("notificationBody").innerHTML = response;
+        }
+    }
+
+    request.open("GET", "LoadTeacherNotification.php", true)
+    request.send()
+}
+function AddLesson() {
+    const gradeSubject = document.getElementById("gradeSub").value
+    if (gradeSubject != "0") {
+        const gradeSubRow = gradeSubject.split("@")
+        const Grade = gradeSubRow[0];
+        const Subject = gradeSubRow[1];
+        const title  = document.getElementById('title').value;
+        const desc   = document.getElementById('desc').value;
+        const pdf = document.getElementById('pdf');
+        const img = document.getElementById('img');
+
+        const form = new FormData();
+        form.append("subject",Subject)
+        form.append("grade",Grade)
+        form.append("title",title)
+        form.append("desc",desc)
+        form.append("pdf",pdf.files[0])
+        form.append("img",img.files[0])
+
+        const request = new XMLHttpRequest()
+        request.onreadystatechange = function (){
+            if (request.readyState == 4){
+                const response = request.responseText;
+                const responseObj =JSON.parse(response);
+                if(responseObj['type'] =='Succcess'){
+                    showSuccess("Done!","Successfully Added Lesson")
+                    t_btn_nav('AddLessons')
+                }else if (responseObj['type'] == "Error"){
+                    showEror("OOPS..!",responseObj['trigger'])
+                }
+            }
+        }
+        request.open("POST","t_AddLesson.php",true);
+        request.send(form)
+
+
+
+
+
+    }else{
+        showEror("OOPS...!","Please select Subject And Grade")
+    }
+}
+
+function AddAsigment() {
+    const gradeSubject = document.getElementById("gradeSub").value
+    if (gradeSubject != "0") {
+        const gradeSubRow = gradeSubject.split("@")
+        const Grade = gradeSubRow[0];
+        const Subject = gradeSubRow[1];
+        const title  = document.getElementById('title').value;
+        const desc   = document.getElementById('desc').value;
+        const pdf = document.getElementById('pdf');
+        const img = document.getElementById('img');
+
+        const form = new FormData();
+        form.append("subject",Subject)
+        form.append("grade",Grade)
+        form.append("title",title)
+        form.append("desc",desc)
+        form.append("pdf",pdf.files[0])
+        form.append("img",img.files[0])
+
+        const request = new XMLHttpRequest()
+        request.onreadystatechange = function (){
+            if (request.readyState == 4){
+                const response = request.responseText;
+                alert(response)
+                const responseObj =JSON.parse(response);
+                if(responseObj['type'] =='Succcess'){
+                    showSuccess("Done!","Successfully Added Asigment")
+                    t_btn_nav('AddAsigment')
+                }else if (responseObj['type'] == "Error"){
+                    showEror("OOPS..!",responseObj['trigger'])
+                }
+            }
+        }
+        request.open("POST","t_AddAsignmentProcess.php",true);
+        request.send(form)
+
+
+
+
+
+    }else{
+        showEror("OOPS...!","Please select Subject And Grade")
+    }
+}
+
+function uploadAnswer(id){
+   
+    const file = document.getElementById("file"+id).files[0];
+
+    const form = new FormData();
+    form.append("pdf",file)
+    form.append('asi_id',id)
 
     const request = new XMLHttpRequest();
     request.onreadystatechange = function (){
         if(request.readyState == 4){
             const response = request.responseText;
             alert(response)
-            const responseObj = JSON.parse(response);
-
-            if (responseObj['type'] == "erorr"){
-                showEror("OOPS..!",responseObj['trigger'])
-
-            }else if (responseObj['type'] == "success"){
-                showSuccess("success","successfully added new Acedemyc Oficer !")
-            }else{
-                alert(response)
-            }
         }
     }
-    request.open("POST","inviteAcedemicOficerProcess.php",true)
-    request.send(form)
+    request.open("POST","s_UploadAsigment.php",true)
+    request.send(form);
+
 
 }
 
-function GetAllGrades(id){
-    const request  = new XMLHttpRequest();
-
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const  respose = request.responseText;
-            // document.getElementById(id).innerHTML = respose
-        }
-    }
-
-    request.open("GET","GetAllGradesProcess.php",true);
-    request.send()
-
-}
-
-function GetAllGradesAndActivateGradesAcOficer(id,id2,email){
-    const request  = new XMLHttpRequest();
-
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const  respose = request.responseText;
-            document.getElementById(id).innerHTML = respose
-        }
-    }
-
-    request.open("GET","GetAllGradesProcess.php",true);
-    request.send()
-
-    GetAllAcoGrades(id2,email)
-
-    
-}
-function GetAllAcoGrades(id2,email){
-    const request2  = new XMLHttpRequest();
+function pay(orderId){
     const form = new FormData();
-    form.append('email',email)
-    request2.onreadystatechange = function (){
-        if(request2.readyState == 4){
-            const  respose2 = request2.responseText;
-            document.getElementById(id2).innerHTML = respose2
-        }
-    }
-
-    request2.open("POST","GetAllAcedemycOfficerHaveGradesProcess.php",true);
-    request2.send(form)
-}
-
-function AddAcedemycForGrade(component,email,unique){
-    const grade = document.getElementById(component).value;
-    const form = new FormData();
-   
-    form.append('grade',grade)
-    form.append('email',email)
-
-    const request  = new XMLHttpRequest();
-
+    form.append("id",orderId);
+    const request = new XMLHttpRequest()
     request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const  respose = request.responseText;
-            const  responseObj = JSON.parse(respose);
+        if (request.readyState == 4){
+            const response = request.responseText;
+            window.location.reload();
+        }}
 
-            if (responseObj['type'] == "Error"){
-                showEror("OOPS..!",responseObj['trigger'])
-            }else if (responseObj['type'] == "success"){
-                showSuccess("Success!","Successfully Added Grade For Acedemic Oficer")
-                GetAllGradesAndActivateGradesAcOficer('AddGradesForAcedemicOficer'+unique,'RemoveTeacherForSubjectAndGradeSelect'+unique,email)
-            }
-        }
-    }
-
-    request.open("POST","AddGradesForAcedemicProcess.php",true);
-    request.send(form)
-
-
+        request.open("POST","Pay.php",true);
+        request.send(form)
 
 }
 
-function RemoveAcedemycForGrade(component,email,unique){
-    const grade = document.getElementById(component).value;
-    const form = new FormData();
-   
-    form.append('grade',grade)
-    form.append('email',email)
-
-    const request  = new XMLHttpRequest();
-
+function PayNow(){
+    const request = new XMLHttpRequest()
     request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const  respose = request.responseText;
+        if (request.readyState == 4){
+            const response = request.responseText;
+            const obj = JSON.parse(response);
+            var mail = obj["email"];
+            var amount = obj["price"];
+
+            // Payment completed. It can be a successful failure.
+            payhere.onCompleted = function onCompleted(orderId) {
+                console.log("Payment completed. OrderID:" + orderId);
+                pay(orderId)
+                
+                // Note: validate the payment and show success or failure page to the customer
+            };
+
+             // Payment window closed
+             payhere.onDismissed = function onDismissed() {
+                // Note: Prompt user to pay again or show an error page
+                console.log("Payment dismissed");
+                alert("Payment dismissed")
+            };
+
+            // Error occurred
+            payhere.onError = function onError(error) {
+                // Note: show an error page
+                console.log("Error:" + error);
+                alert("Error:" + error)
+            };
+
             
-            const  responseObj = JSON.parse(respose);
+                // Put the payment variables here
+                var payment = {
+                    "sandbox": true,
+                    "merchant_id": "1221323",    // Replace your Merchant ID
+                    "return_url": "",     // Important
+                    "cancel_url": "",     // Important
+                    "notify_url": "http://sample.com/notify",
+                    "order_id": 1510,
+                    "items": "studet Portel",
+                    "amount": amount,
+                    "currency": "LKR",
+                    "first_name": mail,
+                    "last_name": mail,
+                    "email": mail,
+                    "phone": "",
+                    "address": "",
+                    "city":"",
+                    "country": "Sri Lanka",
+                    "delivery_address": "",
+                    "delivery_city": "",
+                    "delivery_country": "Sri Lanka",
+                    "custom_1": "",
+                    "custom_2": ""
+                };
 
-            if (responseObj['type'] == "Error"){
-                showEror("OOPS..!",responseObj['trigger'])
-            }else if (responseObj['type'] == "success"){
-                showSuccess("Success!","Successfully Added Grade For Acedemic Oficer")
-                GetAllGradesAndActivateGradesAcOficer('AddGradesForAcedemicOficer'+unique,'RemoveTeacherForSubjectAndGradeSelect'+unique,email)
-            }
-        }
-    }
+                payhere.startPayment(payment);
+                
 
-    request.open("POST","RemoveGradesForAcedemicProcess.php",true);
-    request.send(form)
-
-
-
-}
-
-function GetAllSubjects(id){
-    const request  = new XMLHttpRequest();
-
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const  respose = request.responseText;
-            // document.getElementById(id).innerHTML = respose
-        }
-    }
-
-    request.open("GET","GetAllSubjectProcess.php",true);
-    request.send()
-
-}
-
-function GetAllSubjectAndGrades(SubjectCompId,gradeCompId){
-    GetAllGrades(gradeCompId)
-    GetAllSubjects(SubjectCompId)
-}
-function AddTeacherForSubjectAndGrade(id,email){
-     const row = document.getElementById(id).value;
-     
-     if (row != "0"){
-        const arr = row.split("@");
-        const grade = arr[0];
-        const subject =arr[1];
-
-        const form = new FormData();
-        form.append('grade',grade)
-        form.append('subject',subject)
-        form.append('email',email)
-
-        const request = new XMLHttpRequest();
-        request.onreadystatechange = function (){
-            if(request.readyState == 4){
-                const response = request.responseText;
-                const responseObj = JSON.parse(response);
-
-                if (responseObj['type'] == 'error'){
-                    showEror("OOPS..!",responseObj['trigger'])
-                }else if (responseObj['type'] == 'success'){
-                    showEror("success!","successfully Added Subject and grade")
-
-                    setTimeout(() => {
-                        a_btn_nav('Teachers')
-                    }, 2000);
+                // Show the payhere.js popup, when "PayHere Pay" is clicked
+                document.getElementById('payhere-payment').onclick = function (e) {
                     
-                }else{
+                };
 
-                    alert(response)
-                }
-            }
-        }
-        request.open('POST',"AddGradeAndSubForTeacherProcess.php",true);
-        request.send(form);
-     }
-}
 
-function RemoveTeacherForSubjectAndGrade(id,email){
-   
-    const row = document.getElementById(id).value;
-     
-    if (row != "0"){
-       const arr = row.split("@");
-       const grade = arr[0];
-       const subject =arr[1];
 
-       const form = new FormData();
-       form.append('grade',grade)
-       form.append('subject',subject)
-       form.append('email',email)
-
-       const request = new XMLHttpRequest();
-       request.onreadystatechange = function (){
-           if(request.readyState == 4){
-               const response = request.responseText;
-               alert(response)
-               const responseObj = JSON.parse(response);
-
-               if (responseObj['type'] == 'error'){
-                   showEror("OOPS..!",responseObj['trigger'])
-               }else if (responseObj['type'] == 'success'){
-                   showEror("success!","successfully Remove Subject and grade")
-
-                   setTimeout(() => {
-                       a_btn_nav('Teachers')
-                   }, 2000);
-                   
-               }else{
-
-                   alert(response)
-               }
-           }
-       }
-       request.open('POST',"RemoveGradeAndSubForTeacherProcess.php",true);
-       request.send(form);
-    }
-
-}
-
-function sendNotificationToTeacher(id,email){
-    const text  = document.getElementById(id).value;
-    const form = new FormData();
-    form.append('email',email)
-    form.append('msg',text);
-
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const response = request.responseText;
-            alert(response);
         }
     }
-
-    request.open('POST','SendNotificationToTeacher.php',true)
-    request.send(form);
-
-}
-function sendNotificationToAcedemic(id,email){
-    const text  = document.getElementById(id).value;
-    const form = new FormData();
-    form.append('email',email)
-    form.append('msg',text);
-
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if(request.readyState == 4){
-            const response = request.responseText;
-            alert(response);
-        }
-    }
-
-    request.open('POST','SendNotificationToAcedemic.php',true)
-    request.send(form);
-
-}
-
-function AdminAcedemicSearch(){
-    const text = document.getElementById('a_acdoff_search_txt').value;
-    const grade=document.getElementById('a_acdoff_search_gde').value;
-
-    const form = new FormData()
-    form.append('text',text)
-    form.append('grade',grade)
-
-
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if (request.readyState == 4){
-            const response = request.responseText;
-            document.getElementById('TeachersBody').innerHTML =response
-        }
-    }
-
-    request.open("POST","AdminSearchAcedemic.php",true);
-    request.send(form);
-
-
-}
-
-function AdminTeacherSearch(){
-    const text = document.getElementById('a_teacher_search_txt').value;
-    const grade=document.getElementById('a_teacher_search_gde').value;
-    const sub=document.getElementById('a_teacher_search_sub').value;
-
-    const form = new FormData()
-    form.append('text',text)
-    form.append('grade',grade)
-    form.append('sub',sub)
-
-
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function (){
-        if (request.readyState == 4){
-            const response = request.responseText;
-            document.getElementById('TeachersBody').innerHTML =response
-        }
-    }
-
-    request.open("POST","AdminSearchTeacher.php",true);
-    request.send(form);
-
+    request.open("POST","BuyNowProcess.php",true);
+    request.send()
+    
 
 }

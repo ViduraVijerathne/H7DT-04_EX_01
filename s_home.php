@@ -3,7 +3,19 @@ if (!isset($access_php)) {
     require './access.php';
 }
 if (Access::student()) {
-?>
+    Access::setupEmailPassword();
+    $email = Access::$email;
+    $g_rs = Database::search("SELECT * FROM student WHERE email = '".$email."'");
+    $g_d = $g_rs->fetch_assoc();
+    $grade = $g_d['grade_g_id'];
+    $rs = Database::search("SELECT * FROM s_fees WHERE student_email = '".$email."' AND grade_g_id = '".$grade."'");
+    $d = $rs -> fetch_assoc();
+
+    if ($d['isPay'] == "0"){
+        ?>
+
+        
+
 
     <div class="container">
         <h1 id="headline">Your Trial pereod is End in</h1>
@@ -23,7 +35,8 @@ if (Access::student()) {
 
         <div class="row">
             <div class="col-12">
-                <button class=" btn btn-success"> Pay Now</button>
+            <button type="submit" id="payhere-payment" onclick="PayNow()" class="btn btn-success">Pay Now</button>
+
             </div>
         </div>
     </div>
@@ -111,6 +124,10 @@ if (Access::student()) {
         }
     </style>
 
+    <?php 
+    
+    ?>
+
     <script>
         (function() {
             const second = 1000,
@@ -160,6 +177,18 @@ if (Access::student()) {
     </script>
 
 <?php
+
+
+    }else{
+        ?>
+        <div class="col-12" class="img-thumbnail" style="height:250vh; background-image: url(./src/wallpaper.webp);">
+
+
+        </div>
+        <?php
+    }
+
+
 } else {
 ?>
     <div class="col-12">

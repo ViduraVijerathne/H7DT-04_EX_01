@@ -245,10 +245,9 @@ if (Access::student()) {
                             <button class="btn btn-outline-dark text-capitalize fw-bold" id="btn_" >Quiz</button>
                         </div> -->
                         <div class="row mt-1 pe-3 ps-3">
-                            <button class="btn btn-outline-dark text-capitalize fw-bold"  id="btn_s_leaderBord" onclick="s_btn_nav('s_leaderBord')">LeaderBord</button>
                         </div>
                     <?php
-                       
+
                     }
                     ?>
 
@@ -298,6 +297,9 @@ if (Access::student()) {
         <script>
             AOS.init();
         </script>
+
+        <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+
 
     </body>
 

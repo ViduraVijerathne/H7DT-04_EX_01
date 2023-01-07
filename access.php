@@ -33,6 +33,19 @@ class Access{
         }
      }
 
+     public static function Teacher(){
+        Access::setupEmailPasswordByMode("t");
+
+        $rs  = Teacher_q::signin(Access::$email,Access::$password);
+        $n = $rs -> num_rows;
+        if ($n > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+     }
+
     public static function lv2_Student(){
         Access::setupEmailPassword();
         $rs  = Student_q::SearchStudetByEmailPassword(Access::$email,Access::$password);

@@ -111,4 +111,16 @@ function isThisTeacherHaveThisGradeThisSub($email,$grade,$sub){
     }
 }
 
+function isThisStudentHaveThisGradeThisSub($email,$grade,$sub){
+    $rs = Admin_q::student_has_grade_subjects($email,$grade,$sub);
+
+    $n = $rs -> num_rows;
+
+    if ($n > 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 ?>
